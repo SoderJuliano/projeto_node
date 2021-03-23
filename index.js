@@ -3,7 +3,7 @@ const app = express();
 const fetch = require("node-fetch")
 const cadastro = require("./cadastro.js")
 const path = require("path");
-const dbUser = require("./db2.js")
+const db = require("./db.js")
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -48,9 +48,12 @@ router.get('/sobre', function(req, res) {
 });
 
 router.get('/user', async function(req, res) {
-    const x = await dbUser("SELECT * from user");
-
-    res.send(x);
+    db("SELECT * from user").then((value, err) => {
+        if (err) {
+            res.send("Falha na comunicação")
+        }
+        res.send(value[0].user_name);
+    })
 });
 
 app.use('/', router);
