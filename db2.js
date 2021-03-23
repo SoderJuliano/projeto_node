@@ -1,6 +1,6 @@
 var mysql = require('mysql')
 
-const dbuser = async function(query) => {
+const dbuser = async(query) => {
     const connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
