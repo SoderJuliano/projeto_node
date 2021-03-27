@@ -4,21 +4,20 @@ function db(query) {
     const connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
-        password: '',
+        password: 'password',
         database: 'infinitedungeon'
     });
 
-    return connection.query(query, function(error, results, fields) {
-        //let x = [];
-        if (error)
-            throw error;
-        else
-        /* results.forEach(element => {
-             x.push(element);
-         });*/
-            connection.end();
-        console.log('executou!');
-    });
-}
+    return new Promise((resolve, reject) => {
+        connection.query(query, (error, result) => {
+            if (error) {
+                connection.rollback(function() {
+                    reject(error)
+                })
+            }
 
+            resolve(result)
+        })
+    })
+}
 module.exports = db

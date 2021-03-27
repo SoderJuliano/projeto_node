@@ -1,24 +1,22 @@
 var mysql = require('mysql')
 
-const dbuser = async(query) => {
+function db2(query) {
     const connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
-        password: '',
+        password: 'password',
         database: 'infinitedungeon'
     });
 
-    connection.connect();
-
-    let re;
-    connection.query(query, function(error, results, fields) {
-        if (error) throw error;
-        re = results[0].user_name;
-        console.log('re: ' + re)
-    })
-
-    connection.end();
-    return re;
+    return connection.query(query, function(error, results, fields) {
+        //let x = [];
+        if (error) {
+            throw error;
+        } else {
+            connection.end();
+            console.log('executou!');
+        }
+    });
 }
 
-module.exports = { dbUser }
+module.exports = db2
