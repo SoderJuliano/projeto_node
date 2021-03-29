@@ -6,7 +6,6 @@ const path = require("path");
 const db = require("./db.js")
     //var cors = require('cors')
 
-
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
@@ -48,9 +47,12 @@ app.post('/cadastro', function(req, res, next) {
 //logar usuario
 
 app.post('/login', function(req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
+    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
 
     const body = [];
-
     req.on("data", (chunk) => {
         //console.log(chunk);
         body.push(chunk);
@@ -61,7 +63,7 @@ app.post('/login', function(req, res, next) {
         const message = parsedBody.split('=')[1];
         this.name = JSON.parse(parsedBody).name;
         this.password = JSON.parse(parsedBody).password;
-        console.log(this.name + "end")
+        console.log(this.name + " on end")
 
         if (this.name != null && this.name != "undefined" && this.name != '') {
             db("SELECT * from user WHERE user_name='" + this.name + "' and user_password='" + this.password + "'")
@@ -71,7 +73,7 @@ app.post('/login', function(req, res, next) {
                         res.end()
                     }
                     console.log(`loggend as ${ value[0].user_name}`)
-                    res.send(`loggend as ${value[0].user_name}`);
+                    res.send(value);
                     res.end()
                 })
         } else {
