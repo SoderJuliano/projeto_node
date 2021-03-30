@@ -4,15 +4,22 @@ const fetch = require("node-fetch")
 const cadastro = require("./cadastro.js")
 const path = require("path");
 const db = require("./db.js")
-    //var cors = require('cors')
+var cors = require('cors')
+
+const router = express.Router();
 
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json());
 
-//app.use(cors());
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    console.log("middleware")
 
-const router = express.Router();
+    app.use(cors())
+    next();
+});
+
 
 // novo cadastro
 
@@ -47,11 +54,7 @@ app.post('/cadastro', function(req, res, next) {
 //logar usuario
 
 app.post('/login', function(req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); // If needed
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
-    res.setHeader('Access-Control-Allow-Credentials', true); // If needed
-
+    console.log("in login")
     const body = [];
     req.on("data", (chunk) => {
         //console.log(chunk);
@@ -73,7 +76,7 @@ app.post('/login', function(req, res, next) {
                         res.end()
                     }
                     console.log(`loggend as ${ value[0].user_name}`)
-                    res.send(value);
+                    res.send(value[0]);
                     res.end()
                 })
         } else {
